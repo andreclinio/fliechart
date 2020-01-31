@@ -34,4 +34,7 @@ class PieChartDemoDescriptor implements IPieChartDescriptor {
 
   @override
   Color get shadowColor => Colors.grey.withOpacity(0.5);
+
+  @override
+  Size get size => Size(500, 500);
 }

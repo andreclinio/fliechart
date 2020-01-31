@@ -130,7 +130,7 @@ class PieChartPainter extends CustomPainter {
       if (slice == null) continue;
       final bgColor = asShadow ? Colors.grey : slice.bgColor;
       final fgColor = asShadow ? null : this._descriptor.fgColor;
-      final offset = asShadow ? Offset(10, 10) : null;
+      final offset = asShadow ? Offset(5, 5) : null;
       final text = asShadow ? null: slice.label;
       angle = _drawSlice(
           canvas, paint, square, slice, angle, sum, bgColor, fgColor, text, offset);
