@@ -1,6 +1,7 @@
+import 'package:fliechart/chart-descriptor-demo.dart';
 import 'package:flutter/material.dart';
 
-import 'PieChartPainter.dart';
+import 'chart-widget.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FlieChart Canvas',
+      title: 'FlieChart Canvas Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -26,17 +27,13 @@ class _HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Choose Page"),
-      ),
-      body: Container(
-        width: 300,
-        height: 300,
-        child: CustomPaint(
-          painter: PieChartPainter(),
-          child: Container(),
+      appBar: AppBar(title: Text("Demo Page")),
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [PieChart(PieChartDemoDescriptor())],
         ),
-      ),
-    );
+      );
   }
 }
