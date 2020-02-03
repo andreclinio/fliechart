@@ -29,6 +29,7 @@ class PieChartPainter extends CustomPainter {
 
     _drawBackground(canvas, paint, fullRect);
     _drawBackgroundRays(canvas, paint, fullRect);
+    _drawBackgroundGrid(canvas, paint, fullRect);
     final sum = _calculateSum();
 
     final bool hasShadow = this._descriptor.shadowColor != null;
@@ -39,9 +40,9 @@ class PieChartPainter extends CustomPainter {
   }
 
   void _drawBackground(Canvas canvas, Paint paint, Rect fullRect) {
-    var bgColor = this._descriptor.bgColor;
-    var fgColor = this._descriptor.fgColor;
-    paint.strokeWidth = 2.0;
+    var bgColor = this._descriptor.backgroundColor;
+    var fgColor = this._descriptor.frameColor;
+    paint.strokeWidth = 4.0;
     _drawRect(canvas, paint, fullRect, bgColor, fgColor);
   }
 
@@ -79,11 +80,23 @@ class PieChartPainter extends CustomPainter {
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => true;
 
+  void _drawBackgroundGrid(Canvas canvas, Paint paint, Rect fullRect) {
+    final gridColor = this._descriptor.gridColor;
+    if (gridColor == null) return;
+    var numGrids = this._descriptor.numberOfGrids;
+    if (numGrids == null) return;
+    numGrids = numGrids.abs();
+    final size = fullRect.shortestSide;
+    for (double r = 0; r < size; r += size * (1.0 / numGrids)) {
+      _drawArc(canvas, paint, fullRect.center, r, 0, pi*2);
+    }
+  }
+
   void _drawBackgroundRays(Canvas canvas, Paint paint, Rect fullRect) {
     final rayColor = this._descriptor.rayColor;
     if (rayColor == null) return;
-    var rayNum = this._descriptor.numRays;
-    if (rayNum == null) rayNum = 6;
+    var rayNum = this._descriptor.numberOfRays;
+    if (rayNum == null) return;
     rayNum = rayNum.abs();
 
     final pi2 = pi * 2;
@@ -92,6 +105,7 @@ class PieChartPainter extends CustomPainter {
       _drawBackgroundRay(canvas, paint, fullRect, a, rayColor);
     }
   }
+
 
   void _drawBackgroundRay(
       Canvas canvas, Paint paint, Rect fullRect, double a, Color rayColor) {
@@ -107,12 +121,12 @@ class PieChartPainter extends CustomPainter {
   }
 
   double _calculateSum() {
-    final slices = this._descriptor.slices;
+    final slices = this._descriptor.sliceDescriptors;
     if (slices == null) return 0;
     final numSlices = slices.length;
     var sum = 0.0;
     for (int s = 0; s < numSlices; s++) {
-      final slice = this._descriptor.slices[s];
+      final slice = this._descriptor.sliceDescriptors[s];
       if (slice == null) continue;
       sum += slice.value;
     }
@@ -121,15 +135,15 @@ class PieChartPainter extends CustomPainter {
 
   void _drawSlices(
       Canvas canvas, Paint paint, Rect square, double sum, bool asShadow) {
-    final slices = this._descriptor.slices;
+    final slices = this._descriptor.sliceDescriptors;
     if (slices == null) return;
     final numSlices = slices.length;
     var angle = 0.0;
     for (int s = 0; s < numSlices; s++) {
-      final slice = this._descriptor.slices[s];
+      final slice = this._descriptor.sliceDescriptors[s];
       if (slice == null) continue;
       final bgColor = asShadow ? Colors.grey : slice.bgColor;
-      final fgColor = asShadow ? null : this._descriptor.fgColor;
+      final fgColor = asShadow ? null : this._descriptor.foregroundColor;
       final offset = asShadow ? Offset(5, 5) : null;
       final text = asShadow ? null: slice.label;
       angle = _drawSlice(

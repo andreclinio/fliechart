@@ -32,7 +32,7 @@ class _HomeState extends State<HomePage> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [PieChart(PieChartDemoDescriptor())],
+        children: [PieChart(context, PieChartDemoDescriptor())],
         ),
       );
   }

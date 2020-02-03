@@ -7,13 +7,17 @@ import 'chart-painter.dart';
 
 class PieChart extends CustomPaint {
 
-  PieChart(IPieChartDescriptor descriptor) : 
-  super(painter: PieChartPainter(descriptor), child: _buildContainer(descriptor));
+  PieChart(BuildContext context, IPieChartDescriptor descriptor) : 
+  super(painter: PieChartPainter(descriptor), child: _buildContainer(context, descriptor));
 
-  static Container _buildContainer(IPieChartDescriptor descriptor) {
-    var size = descriptor.size;
-    if (size == null)  size = Size(400, 400);
-    return Container(width: size.width, height: size.height);
+  static Container _buildContainer(BuildContext context, IPieChartDescriptor descriptor) {
+    var sizeRatio = descriptor.sizeRatio;
+    if (sizeRatio == null || sizeRatio <= 0.01)  sizeRatio = 1.0;
+    sizeRatio = sizeRatio.abs();
+    final screenSize = MediaQuery.of(context).size;
+    final chartSize = screenSize.shortestSide * sizeRatio; 
+
+    return Container(width: chartSize, height: chartSize);
     
   }
 }

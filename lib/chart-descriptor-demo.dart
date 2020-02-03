@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 
 class PieChartDemoDescriptor implements IPieChartDescriptor {
   @override
-  Color get bgColor => Colors.cyan.shade200;
+  Color get backgroundColor => Colors.cyan.shade200;
 
   @override
-  Color get fgColor => Colors.black;
+  Color get foregroundColor => Colors.black;
 
   @override
   double get radiusFactor => 0.8;
@@ -18,10 +18,10 @@ class PieChartDemoDescriptor implements IPieChartDescriptor {
   Color get rayColor => Colors.blueAccent.shade400;
 
   @override
-  double get numRays => 10;
+  int get numberOfRays => 10;
 
   @override
-  List<ISliceDescriptor> get slices {
+  List<ISliceDescriptor> get sliceDescriptors {
     List<ISliceDescriptor> slices = [];
     final slice1 = SliceDescriptor(value: 60, label: "A", bgColor: Colors.red.withOpacity(0.8));
     final slice2 = SliceDescriptor(value: 30, label: "B", bgColor: Colors.green);
@@ -36,5 +36,14 @@ class PieChartDemoDescriptor implements IPieChartDescriptor {
   Color get shadowColor => Colors.grey.withOpacity(0.5);
 
   @override
-  Size get size => Size(500, 500);
+  double get sizeRatio => 0.5;
+
+  @override
+  Color get gridColor => Colors.blueAccent.shade400;
+
+  @override
+  int get numberOfGrids => 10;
+
+  @override
+  Color get frameColor => Colors.black;
 }

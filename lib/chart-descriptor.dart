@@ -1,50 +1,91 @@
+
 import 'package:fliechart/slice-descriptor.dart';
 import "package:flutter/material.dart";
 
 abstract class IPieChartDescriptor {
-  Color get bgColor;
-  Color get fgColor;
+  Color get backgroundColor;
+  Color get foregroundColor;
   double get radiusFactor;
   Color get rayColor;
-  double get numRays;
-  List<ISliceDescriptor> get slices;
   Color get shadowColor;
+  Color get frameColor => null;
+  double get sizeRatio;
+  Color get gridColor;
+  int get numberOfRays;
+  int get numberOfGrids;
+  List<ISliceDescriptor> get sliceDescriptors;
 
-  Size get size;
 }
 
 class PieChartDescriptor extends IPieChartDescriptor {
-  final Color _bgColor;
+  final List<ISliceDescriptor> _sliceDescriptors;
+  final Color _backgroundColor;
+  final Color _foregroundColor;
+  final Color _frameColor;
+  final Color _gridColor;
+  final Color _rayColor;
+  final Color _shadowColor;
+  final double _radiusFactor;
+  final int _numberOfRays;
+  final int _numberOfGrids;
+  final double _sizeRatio;
 
-  PieChartDescriptor({Color bgColor}) : this._bgColor = bgColor;
+  PieChartDescriptor({
+      @required List<ISliceDescriptor> sliceDescriptors,
+      Color backgroundColor,
+      Color foregroundColor,
+      Color frameColor,
+      Color gridColor,
+      Color rayColor,
+      Color shadowColor,
+      int numberOfRays,
+      int numberOfGrids,
+      double radiusFactor,
+      double sizeRatio
+      })
+      : 
+        this._sliceDescriptors = sliceDescriptors,
+      this._backgroundColor = backgroundColor,
+        this._foregroundColor = foregroundColor,
+        this._frameColor = frameColor,
+        this._gridColor = gridColor,
+        this._rayColor = rayColor,
+        this._shadowColor = shadowColor,
+        this._numberOfRays = numberOfRays,
+        this._numberOfGrids = numberOfGrids,
+        this._radiusFactor = radiusFactor,
+        this._sizeRatio = sizeRatio;
 
   @override
-  Color get bgColor => _bgColor;
+  Color get backgroundColor => _backgroundColor;
 
   @override
-  Color get fgColor => null;
+  Color get foregroundColor => _foregroundColor;
 
   @override
-  // TODO: implement
-  double get radiusFactor => null;
+  Color get frameColor => _frameColor;
 
   @override
-  // TODO: implement
-  Color get rayColor => null;
+  Color get gridColor => _gridColor;
 
   @override
-  // TODO: implement
-  double get numRays => null;
+  Color get rayColor => _rayColor;
 
   @override
-  // TODO: implement
-  Color get shadowColor => null;
+  Color get shadowColor => _shadowColor;
 
   @override
-  // TODO: implement
-  List<ISliceDescriptor> get slices => null;
+  double get radiusFactor => _radiusFactor;
 
   @override
-  // TODO: implement
-  Size get size => null;
+  int get numberOfRays => _numberOfRays;
+
+  @override
+  int get numberOfGrids => _numberOfGrids;
+
+  @override
+  List<ISliceDescriptor> get sliceDescriptors => _sliceDescriptors;
+
+  @override
+  double get sizeRatio => _sizeRatio;
 }
