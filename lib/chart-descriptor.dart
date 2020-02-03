@@ -8,7 +8,7 @@ abstract class IPieChartDescriptor {
   double get radiusFactor;
   Color get rayColor;
   Color get shadowColor;
-  Color get frameColor => null;
+  Color get frameColor;
   double get sizeRatio;
   Color get gridColor;
   int get numberOfRays;
