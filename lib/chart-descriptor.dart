@@ -9,12 +9,12 @@ abstract class IPieChartDescriptor {
   Color get rayColor;
   Color get shadowColor;
   Color get frameColor => null;
-  double get sizeRatio;
+  double get sizeFactor;
   Color get gridColor;
   int get numberOfRays;
   int get numberOfGrids;
   List<ISliceDescriptor> get sliceDescriptors;
-
+  double get ringFactor;
 }
 
 class PieChartDescriptor extends IPieChartDescriptor {
@@ -28,7 +28,9 @@ class PieChartDescriptor extends IPieChartDescriptor {
   final double _radiusFactor;
   final int _numberOfRays;
   final int _numberOfGrids;
-  final double _sizeRatio;
+  final double _sizeFactor;
+  final double _ringFactor;
+
 
   PieChartDescriptor({
       @required List<ISliceDescriptor> sliceDescriptors,
@@ -41,7 +43,8 @@ class PieChartDescriptor extends IPieChartDescriptor {
       int numberOfRays,
       int numberOfGrids,
       double radiusFactor,
-      double sizeRatio
+      double sizeFactor,
+      double ringFactor
       })
       : 
         this._sliceDescriptors = sliceDescriptors,
@@ -54,7 +57,8 @@ class PieChartDescriptor extends IPieChartDescriptor {
         this._numberOfRays = numberOfRays,
         this._numberOfGrids = numberOfGrids,
         this._radiusFactor = radiusFactor,
-        this._sizeRatio = sizeRatio;
+        this._sizeFactor = sizeFactor,
+        this._ringFactor = ringFactor;
 
   @override
   Color get backgroundColor => _backgroundColor;
@@ -87,5 +91,8 @@ class PieChartDescriptor extends IPieChartDescriptor {
   List<ISliceDescriptor> get sliceDescriptors => _sliceDescriptors;
 
   @override
-  double get sizeRatio => _sizeRatio;
+  double get sizeFactor => _sizeFactor;
+
+  @override
+  double get ringFactor => _ringFactor;
 }

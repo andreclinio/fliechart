@@ -64,17 +64,25 @@ class PieChartPainter extends CustomPainter {
     Canvas canvas,
     Paint paint,
     Offset center,
-    double radius,
+    double radiusMin,
+    double radiusMax,
     startRadian,
     sweepRadian,
   ) {
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startRadian,
-      sweepRadian,
-      true,
-      paint,
-    );
+    paint.strokeWidth = 1.0;
+    final r1 = min(radiusMax, radiusMin);
+    final r2 = max(radiusMax, radiusMin);
+    final Path path = Path();
+    final p1 = _moveTo(center, startRadian, r1);
+    path.moveTo(p1.dx, p1.dy);
+    path.arcTo(Rect.fromCircle(center: center, radius: r1), startRadian,
+        sweepRadian, false);
+    final p2 = _moveTo(center, startRadian + sweepRadian, r2);
+    path.lineTo(p2.dx, p2.dy);
+    path.arcTo(Rect.fromCircle(center: center, radius: r2),
+        startRadian + sweepRadian, -sweepRadian, false);
+    path.lineTo(p1.dx, p1.dy);
+    canvas.drawPath(path, paint);
   }
 
   @override
@@ -88,7 +96,7 @@ class PieChartPainter extends CustomPainter {
     numGrids = numGrids.abs();
     final size = fullRect.shortestSide;
     for (double r = 0; r < size; r += size * (1.0 / numGrids)) {
-      _drawArc(canvas, paint, fullRect.center, r, 0, pi*2);
+      _drawArc(canvas, paint, fullRect.center, 0.0, r, 0, pi * 2);
     }
   }
 
@@ -105,7 +113,6 @@ class PieChartPainter extends CustomPainter {
       _drawBackgroundRay(canvas, paint, fullRect, a, rayColor);
     }
   }
-
 
   void _drawBackgroundRay(
       Canvas canvas, Paint paint, Rect fullRect, double a, Color rayColor) {
@@ -135,19 +142,19 @@ class PieChartPainter extends CustomPainter {
 
   void _drawSlices(
       Canvas canvas, Paint paint, Rect square, double sum, bool asShadow) {
-    final slices = this._descriptor.sliceDescriptors;
+    final slices = _descriptor.sliceDescriptors;
     if (slices == null) return;
     final numSlices = slices.length;
     var angle = 0.0;
     for (int s = 0; s < numSlices; s++) {
-      final slice = this._descriptor.sliceDescriptors[s];
+      final slice = _descriptor.sliceDescriptors[s];
       if (slice == null) continue;
-      final bgColor = asShadow ? Colors.grey : slice.bgColor;
-      final fgColor = asShadow ? null : this._descriptor.foregroundColor;
+      final bgColor = asShadow ? _descriptor.shadowColor : slice.color;
+      final fgColor = asShadow ? null : _descriptor.foregroundColor;
       final offset = asShadow ? Offset(5, 5) : null;
-      final text = asShadow ? null: slice.label;
-      angle = _drawSlice(
-          canvas, paint, square, slice, angle, sum, bgColor, fgColor, text, offset);
+      final text = asShadow ? null : slice.label;
+      angle = _drawSlice(canvas, paint, square, slice, angle, sum, bgColor,
+          fgColor, text, offset);
     }
   }
 
@@ -159,10 +166,16 @@ class PieChartPainter extends CustomPainter {
       double initAngle,
       double sum,
       Color bgColor,
-      Color fgColor, String text,
+      Color fgColor,
+      String text,
       Offset offset) {
+    var ringFactor = _descriptor.ringFactor;
+    if (ringFactor == null) ringFactor = 0.0;
+    if (ringFactor < 0.0) ringFactor = 0.0;
+    if (ringFactor > 0.99) ringFactor = 0.99;
     final angle = slice.value / sum * pi * 2;
-    final radius = square.shortestSide / 2.0;
+    final endRadius = square.shortestSide / 2.0;
+    final startRadius = endRadius * ringFactor;
     final centerAngle = initAngle + angle / 2.0;
 
     final center = offset != null
@@ -170,27 +183,31 @@ class PieChartPainter extends CustomPainter {
         : square.center;
     var sliceCenter = center;
 
-    var detachRatio = slice.detachRatio;
+    var detachRatio = slice.detachFactor;
     if (detachRatio != null) {
       if (detachRatio < 0.0) detachRatio = 0.0;
       if (detachRatio > 1.0) detachRatio = 1.0;
-      sliceCenter = _moveTo(center, centerAngle, radius * detachRatio);
+      sliceCenter = _moveTo(center, centerAngle, endRadius * detachRatio);
     }
 
     if (bgColor != null) {
       paint.style = PaintingStyle.fill;
       paint.color = bgColor;
-      _drawArc(canvas, paint, sliceCenter, radius, initAngle, angle);
+      _drawArc(
+          canvas, paint, sliceCenter, startRadius, endRadius, initAngle, angle);
     }
     if (fgColor != null) {
       paint.style = PaintingStyle.stroke;
       paint.color = fgColor;
-      _drawArc(canvas, paint, sliceCenter, radius, initAngle, angle);
+      _drawArc(
+          canvas, paint, sliceCenter, startRadius, endRadius, initAngle, angle);
     }
 
     if (text != null) {
-      final txtColor = slice.txtColor == null ? Colors.black : slice.txtColor;
-      final pt = _moveTo(sliceCenter, centerAngle, radius * 0.5);
+      final txtColor = slice.labelColor == null ? Colors.black : slice.labelColor;
+      final txtFactor = slice.labelFactor == null ? 0.5 : slice.labelFactor;
+      final deltaRadius = endRadius - startRadius;
+      final pt = _moveTo(sliceCenter, centerAngle, startRadius + (deltaRadius * txtFactor));
       final span =
           TextSpan(text: slice.label, style: TextStyle(color: txtColor));
       final tp = TextPainter(text: span, textDirection: TextDirection.ltr);

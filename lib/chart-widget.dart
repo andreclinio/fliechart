@@ -11,7 +11,7 @@ class PieChart extends CustomPaint {
   super(painter: PieChartPainter(descriptor), child: _buildContainer(context, descriptor));
 
   static Container _buildContainer(BuildContext context, IPieChartDescriptor descriptor) {
-    var sizeRatio = descriptor.sizeRatio;
+    var sizeRatio = descriptor.sizeFactor;
     if (sizeRatio == null || sizeRatio <= 0.01)  sizeRatio = 1.0;
     sizeRatio = sizeRatio.abs();
     final screenSize = MediaQuery.of(context).size;
