@@ -66,8 +66,8 @@ class PieChartPainter extends CustomPainter {
     Offset center,
     double radiusMin,
     double radiusMax,
-    startRadian,
-    sweepRadian,
+    double startRadian,
+    double sweepRadian,
   ) {
     paint.strokeWidth = 1.0;
     final r1 = min(radiusMax, radiusMin);
