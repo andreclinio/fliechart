@@ -3,17 +3,17 @@
 
 abstract class IPieChartCallbacks {
 
-  void tappedSlice(ISliceDescriptor slice);
+  void tappedSlice(List<ISliceDescriptor> allSlices, ISliceDescriptor tappedSlice);
 }
 
 class PieChartCallbacks extends IPieChartCallbacks {
 
-   final void Function(ISliceDescriptor) _tappedSlice;
+   final void Function(List<ISliceDescriptor>, ISliceDescriptor) _tappedSlice;
 
-   PieChartCallbacks({ Function(ISliceDescriptor) tappedSlice}) : this._tappedSlice = tappedSlice;
+   PieChartCallbacks({ Function(List<ISliceDescriptor>, SliceDescriptor) tappedSlice}) : this._tappedSlice = tappedSlice;
 
    @override
-   void tappedSlice(ISliceDescriptor slice) {
-     if (_tappedSlice != null) _tappedSlice(slice);
+   void tappedSlice(List<ISliceDescriptor> allSlices, ISliceDescriptor tappedSlice) {
+     if (_tappedSlice != null) _tappedSlice(allSlices, tappedSlice);
    }
 }

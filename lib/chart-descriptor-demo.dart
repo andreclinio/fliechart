@@ -7,6 +7,13 @@ import 'package:flutter/material.dart';
 
 /// Demonstration pie chart descritor
 class PieChartDemoDescriptor implements IPieChartDescriptor {
+
+static List<ISliceDescriptor> _slices = [
+    SliceDescriptor(value: 10, label: "A", color: Colors.yellow.withOpacity(0.5), detachFactor: 0.1),
+    SliceDescriptor(value: 20, label: "B", color: Colors.deepOrange, detachFactor: 0.2),
+    SliceDescriptor(value: 50, label: "C", color: Colors.blueGrey)
+];
+    
   @override
   Color get backgroundColor => Colors.cyan[50];
 
@@ -24,14 +31,7 @@ class PieChartDemoDescriptor implements IPieChartDescriptor {
 
   @override
   List<ISliceDescriptor> get sliceDescriptors {
-    List<ISliceDescriptor> slices = [];
-    final slice1 = SliceDescriptor(value: 10, label: "A", color: Colors.yellow.withOpacity(0.5), detachFactor: 0.1);
-    final slice2 = SliceDescriptor(value: 20, label: "B", color: Colors.deepOrange, detachFactor: 0.2);
-    final slice3 = SliceDescriptor(value: 50, label: "C", color: Colors.blueGrey);
-    slices.add(slice1);
-    slices.add(slice2);
-    slices.add(slice3);
-    return slices;
+    return _slices;
   }
 
   @override

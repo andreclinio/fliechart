@@ -241,10 +241,10 @@ class PieChartPainter extends CustomPainter {
   ISliceDescriptor findSlice(Offset offset) {
     ISliceDescriptor foundSlice;
     _pathMap.forEach( (sld, pth) { 
-      print("?? " + sld.label + " --- " +pth.getBounds().toString());
+      // print("?? " + sld.label + " --- " +pth.getBounds().toString());
       if (pth.contains(offset)) {
         foundSlice = sld;
-        print("!!" + sld.label);
+        // print("!!" + sld.label);
       }
       });
     return foundSlice;

@@ -51,8 +51,12 @@ class _HomeState extends State<HomePage> {
     );
   }
 
-  void _x(ISliceDescriptor s) {
+  void _x(List<ISliceDescriptor> all, ISliceDescriptor s) {
     setState(() {
+      all.forEach((s) {
+        final slice = s as SliceDescriptor;
+        slice.color = Colors.white;
+      });
       final slice = s as SliceDescriptor;
       slice.color = Colors.red;
     });
