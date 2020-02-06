@@ -26,8 +26,8 @@ abstract class IPieChartDescriptor {
   /// Chart external rectangle frame color. A null value indicates no frame.
   Color get frameColor;
 
-  /// Chart relative size, when compared to full screen size.
-  double get sizeFactor;
+  /// Chart size.
+  Size get size;
 
   /// Number of linear rays for the chart grid system.
   int get numberOfRays;
@@ -60,7 +60,7 @@ class PieChartDescriptor extends IPieChartDescriptor {
   final double _radiusFactor;
   final int _numberOfRays;
   final double _gridFactor;
-  final double _sizeFactor;
+  final Size _size;
   final double _ringFactor;
   final double _startAngle;
   final bool _clockwise;
@@ -76,7 +76,7 @@ class PieChartDescriptor extends IPieChartDescriptor {
       int numberOfRays,
       double gridFactor,
       double radiusFactor,
-      double sizeFactor,
+      Size size,
       double ringFactor,
       double startAngle,
       bool clockwise})
@@ -90,7 +90,7 @@ class PieChartDescriptor extends IPieChartDescriptor {
         this._numberOfRays = numberOfRays,
         this._gridFactor = gridFactor,
         this._radiusFactor = radiusFactor,
-        this._sizeFactor = sizeFactor,
+        this._size = size,
         this._ringFactor = ringFactor,
         this._startAngle = startAngle,
         this._clockwise = clockwise;
@@ -126,7 +126,7 @@ class PieChartDescriptor extends IPieChartDescriptor {
   List<ISliceDescriptor> get sliceDescriptors => _sliceDescriptors;
 
   @override
-  double get sizeFactor => _sizeFactor;
+  Size get size => _size;
 
   @override
   double get ringFactor => _ringFactor;

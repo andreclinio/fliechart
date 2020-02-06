@@ -1,4 +1,6 @@
+import 'package:fliechart/chart-callbacks.dart';
 import 'package:fliechart/chart-descriptor-demo.dart';
+import 'package:fliechart/slice-descriptor.dart';
 import 'package:flutter/material.dart';
 
 import 'chart-widget.dart';
@@ -27,13 +29,32 @@ class _HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Demo Page")),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [PieChart(context, PieChartDemoDescriptor())],
-        ),
-      );
+      appBar: AppBar(title: Text("FlieChart Demo Page")),
+      body: Container(
+        child: _buildListView(context),
+      ),
+    );
+  }
+
+  Widget _buildListView(BuildContext context) {
+    return ListView.builder(
+        itemCount: 10,
+        itemBuilder: (context, index) {
+          return ListTile(leading: Text("Demo " + index.toString()), title: _buildChatDemo(context));
+        });
+  }
+
+  Widget _buildChatDemo(BuildContext context) {
+    return PieChart(
+      descriptor: PieChartDemoDescriptor(),
+      callbacks: PieChartCallbacks(tappedSlice: _x),
+    );
+  }
+
+  void _x(ISliceDescriptor s) {
+    setState(() {
+      final slice = s as SliceDescriptor;
+      slice.color = Colors.red;
+    });
   }
 }

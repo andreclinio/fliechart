@@ -10,6 +10,8 @@ class PieChartPainter extends CustomPainter {
   /// Piechar descriptor.
   final IPieChartDescriptor _descriptor;
 
+  final Map<ISliceDescriptor, Path> _pathMap = Map<ISliceDescriptor, Path>();
+
   /// Default contructor with a `descriptor` parameter.
   PieChartPainter(IPieChartDescriptor descriptor) : this._descriptor = descriptor;
 
@@ -25,6 +27,9 @@ class PieChartPainter extends CustomPainter {
     final center = size.center(Offset.zero);
     final fullRect = Rect.fromCenter(center: center, width: size.width, height: size.height);
     canvas.clipRect(fullRect, clipOp: ClipOp.intersect);
+
+    // Pay attention to clear the path map!
+    _pathMap.clear();
 
     final pieSquare = Rect.fromCenter(center: center, width: squareSize, height: squareSize);
     var paint = Paint();
@@ -67,8 +72,15 @@ class PieChartPainter extends CustomPainter {
   }
 
   /// Draws the arc based on current `paint` attributes for stroke and paint color.
-  void _drawArc(Canvas canvas, Paint paint, Offset center, double startRadius, double endRadius, double startRadian,
+  Path _drawArc(Canvas canvas, Paint paint, Offset center, double startRadius, double endRadius, double startRadian,
       double sweepRadian) {
+    final path = _getArcPath(center, startRadius, endRadius, startRadian, sweepRadian);
+    canvas.drawPath(path, paint);
+    return path;
+  }
+
+  /// Get arc
+  Path _getArcPath(Offset center, double startRadius, double endRadius, double startRadian, double sweepRadian) {
     final r1 = min(endRadius, startRadius);
     final r2 = max(endRadius, startRadius);
     final Path path = Path();
@@ -79,7 +91,7 @@ class PieChartPainter extends CustomPainter {
     path.lineTo(p2.dx, p2.dy);
     path.arcTo(Rect.fromCircle(center: center, radius: r2), startRadian + sweepRadian, -sweepRadian, false);
     path.lineTo(p1.dx, p1.dy);
-    canvas.drawPath(path, paint);
+    return path;
   }
 
   /// Draws a circle based on current paint configuration.
@@ -178,7 +190,8 @@ class PieChartPainter extends CustomPainter {
     if (bgColor != null) {
       paint.style = PaintingStyle.fill;
       paint.color = bgColor;
-      _drawArc(canvas, paint, sliceCenter, startRadius, endRadius, initAngle, angle);
+      final path = _drawArc(canvas, paint, sliceCenter, startRadius, endRadius, initAngle, angle);
+      _pathMap.putIfAbsent(slice, () => path);
     }
     if (fgColor != null) {
       paint.style = PaintingStyle.stroke;
@@ -223,5 +236,17 @@ class PieChartPainter extends CustomPainter {
       sum += slice.value;
     }
     return sum;
+  }
+
+  ISliceDescriptor findSlice(Offset offset) {
+    ISliceDescriptor foundSlice;
+    _pathMap.forEach( (sld, pth) { 
+      print("?? " + sld.label + " --- " +pth.getBounds().toString());
+      if (pth.contains(offset)) {
+        foundSlice = sld;
+        print("!!" + sld.label);
+      }
+      });
+    return foundSlice;
   }
 }

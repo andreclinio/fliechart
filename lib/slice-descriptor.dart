@@ -32,25 +32,25 @@ abstract class ISliceDescriptor {
 class SliceDescriptor extends ISliceDescriptor {
   
   /// Storage field for [ISliceDescriptor.value]
-  final double _value;
+ double _value;
 
   /// Storage field for [ISliceDescriptor.color]
-  final Color _color;
+ Color _color;
 
   /// Storage field for [ISliceDescriptor.labelColor]
-  final Color _labelColor;
+   Color _labelColor;
 
   /// Storage field for [ISliceDescriptor.labelSize]
-  final double _labelSize;
+   double _labelSize;
 
   /// Storage field for [ISliceDescriptor.detachFactor]
-  final double _detachFactor;
+   double _detachFactor;
 
   /// Storage field for [ISliceDescriptor.labelFactor]
-  final double _labelFactor;
+   double _labelFactor;
 
   /// Storage field for [ISliceDescriptor.label]
-  final String _label;
+   String _label;
 
   /// Default constructor with standard required parameters `value`, `label` and `color`. All other parameters can be unset. This will produce a char with default configuration.
   SliceDescriptor(
@@ -89,4 +89,20 @@ class SliceDescriptor extends ISliceDescriptor {
 
   @override
   double get labelFactor => this._labelFactor;
+
+  
+  set value(double value) => this._value = value;
+
+  set color(Color color) => this._color = color;
+
+  set label(String label) => this._label = label;
+
+  set labelColor(Color labelColor) => this._labelColor = labelColor;
+
+  set labelSize(double labelSize) => this._labelSize = labelSize;
+
+  set detachFactor(double detachFactor) => this._detachFactor = detachFactor;
+
+  set labelFactor(double labelFactor) => this._labelFactor = labelFactor;
+
 }
