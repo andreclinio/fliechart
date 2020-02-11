@@ -36,7 +36,7 @@ class PieChart extends StatelessWidget {
         final local = box.globalToLocal(global);
         final foundSlice = chartPainter.findSlice(local);
         if (foundSlice != null && tappedCallback != null) {
-          tappedCallback(_descriptor.sliceDescriptors, foundSlice);
+          tappedCallback(_descriptor, foundSlice);
         }
       },
       child: _buildCustomPaint(chartPainter, size),

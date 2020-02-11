@@ -1,5 +1,6 @@
 import 'package:fliechart/chart-callbacks.dart';
 import 'package:fliechart/chart-descriptor-demo.dart';
+import 'package:fliechart/chart-descriptor.dart';
 import 'package:fliechart/slice-descriptor.dart';
 import 'package:flutter/material.dart';
 
@@ -51,9 +52,10 @@ class _HomeState extends State<HomePage> {
     );
   }
 
-  void _x(List<ISliceDescriptor> all, ISliceDescriptor s) {
+  void _x(IPieChartDescriptor descritor, ISliceDescriptor s) {
     setState(() {
-      all.forEach((s) {
+      final allSlices = descritor.sliceDescriptors;
+      allSlices.forEach((s) {
         final slice = s as SliceDescriptor;
         slice.color = Colors.white;
       });

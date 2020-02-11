@@ -1,19 +1,26 @@
 
- import 'package:fliechart/slice-descriptor.dart';
+ import 'package:fliechart/chart-descriptor.dart';
+import 'package:fliechart/slice-descriptor.dart';
 
+/// Callbacks interface for [IPieChartDescriptor]
 abstract class IPieChartCallbacks {
 
-  void tappedSlice(List<ISliceDescriptor> allSlices, ISliceDescriptor tappedSlice);
+  /// Callback for user tap on char slice
+  void tappedSlice(IPieChartDescriptor pieChartDescriptor, ISliceDescriptor tappedSlice);
 }
 
+/// Utility class for handling callbacks
 class PieChartCallbacks extends IPieChartCallbacks {
 
-   final void Function(List<ISliceDescriptor>, ISliceDescriptor) _tappedSlice;
+   /// Tapped slice callback
+   final void Function(IPieChartDescriptor, ISliceDescriptor) _tappedSlice;
 
-   PieChartCallbacks({ Function(List<ISliceDescriptor>, SliceDescriptor) tappedSlice}) : this._tappedSlice = tappedSlice;
+   /// Default construtor
+   PieChartCallbacks({ Function(IPieChartDescriptor, ISliceDescriptor) tappedSlice}) : 
+   this._tappedSlice = tappedSlice;
 
    @override
-   void tappedSlice(List<ISliceDescriptor> allSlices, ISliceDescriptor tappedSlice) {
-     if (_tappedSlice != null) _tappedSlice(allSlices, tappedSlice);
+   void tappedSlice(IPieChartDescriptor pieChartDescriptor, ISliceDescriptor tappedSlice) {
+     if (_tappedSlice != null) _tappedSlice(pieChartDescriptor, tappedSlice);
    }
 }

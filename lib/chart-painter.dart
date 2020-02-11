@@ -35,14 +35,20 @@ class PieChartPainter extends CustomPainter {
     var paint = Paint();
     paint.isAntiAlias = true;
 
+    // Paint background color, rays and grid before painting al slices.
     _drawBackground(canvas, paint, fullRect);
     _drawBackgroundRays(canvas, paint, fullRect);
     _drawBackgroundGrid(canvas, paint, fullRect);
-    final sum = _calculateSum();
 
+    // Paint slices (with shadow if needed)
+    final sum = _calculateSum();
     final bool hasShadow = this._descriptor.shadowColor != null;
     if (hasShadow) _drawSlices(canvas, paint, pieSquare, sum, true);
     _drawSlices(canvas, paint, pieSquare, sum, false);
+
+    // Paint frame rectangler
+    _drawForeground(canvas, paint, fullRect);
+
     canvas.save();
     canvas.restore();
   }
@@ -51,9 +57,15 @@ class PieChartPainter extends CustomPainter {
   /// [IPieChartDescriptor.backgroundColor] and [IPieChartDescriptor.frameColor].
   void _drawBackground(Canvas canvas, Paint paint, Rect fullRect) {
     var bgColor = this._descriptor.backgroundColor;
+    _drawRectangle(canvas, paint, fullRect, bgColor, null);
+  }
+
+  /// Draws the background for the chart using the descriptor properties:
+  /// [IPieChartDescriptor.backgroundColor] and [IPieChartDescriptor.frameColor].
+  void _drawForeground(Canvas canvas, Paint paint, Rect fullRect) {
     var fgColor = this._descriptor.frameColor;
     paint.strokeWidth = 4.0;
-    _drawRectangle(canvas, paint, fullRect, bgColor, fgColor);
+    _drawRectangle(canvas, paint, fullRect, null, fgColor);
   }
 
   /// Draws a simple rectangle `rect` using `bgColor` and `fgColor` for the paint and stroke colors
@@ -238,15 +250,17 @@ class PieChartPainter extends CustomPainter {
     return sum;
   }
 
+  /// Searches for a slice (path previosly stored) based on a coordinate ([offset]).
+  /// Returns the slice descriptor.
   ISliceDescriptor findSlice(Offset offset) {
     ISliceDescriptor foundSlice;
-    _pathMap.forEach( (sld, pth) { 
+    _pathMap.forEach((sld, pth) {
       // print("?? " + sld.label + " --- " +pth.getBounds().toString());
       if (pth.contains(offset)) {
         foundSlice = sld;
         // print("!!" + sld.label);
       }
-      });
+    });
     return foundSlice;
   }
 }
